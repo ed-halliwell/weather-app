@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import "../styles/SearchBox.css";
 
-interface Props {
+interface SearchBoxProps {
   handleSearchSubmit: (searchQuery: React.FormEvent) => void;
 }
 
-export default function SearchBox(props: Props): JSX.Element {
+export default function SearchBox(props: SearchBoxProps): JSX.Element {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   return (

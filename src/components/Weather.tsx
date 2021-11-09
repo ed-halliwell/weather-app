@@ -2,14 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "../styles/Weather.css";
 
-interface Props {
+interface WeatherProps {
   location: string;
   setLocation: (locationName: string) => void;
 }
-
-// interface IForecast {}
-
-// interface IWeather {}
 
 // Weather API docs: https://openweathermap.org/current
 const WEATHER_API_BASE_URL =
@@ -25,7 +21,7 @@ const GEO_API_KEY =
 
 const GEO_CODING_BASE_URL = "http://api.openweathermap.org/geo/1.0/reverse?";
 
-export default function Weather(props: Props) {
+export default function Weather(props: WeatherProps) {
   const [coordinates, setCoordinates] = useState<number[]>([]);
   //   const [weather, setWeather] = useState<IForecast>();
   //   const [forecast, setForecast] = useState<IForecast>();

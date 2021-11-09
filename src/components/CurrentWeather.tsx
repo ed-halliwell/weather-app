@@ -1,11 +1,6 @@
 import "../styles/Currentweather.css";
 import WindIcon from "./WindIcon";
-interface IWeather {
-  temperature: number;
-  windSpeed: number;
-  windDirection: number;
-  description: string;
-}
+import { IWeather } from "../utils/interfaces";
 
 interface Props {
   weather: IWeather;
