@@ -4,3 +4,4 @@ export interface IWeather {
   windDirection: number;
   description: string;
 }
+export {};
