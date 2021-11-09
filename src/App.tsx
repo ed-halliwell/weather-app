@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SearchBox from "./components/SearchBox";
 import Weather from "./components/Weather";
+import "./styles/App.css";
 
 export default function App(): JSX.Element {
   const [location, setLocation] = useState<string>("");

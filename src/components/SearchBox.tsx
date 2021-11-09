@@ -1,14 +1,19 @@
 import React, { useState } from "react";
+import "../styles/SearchBox.css";
 
 interface Props {
-  handleSearchSubmit: (searchQuery: React.FormEvent<HTMLFormElement>) => void;
+  handleSearchSubmit: (searchQuery: React.FormEvent) => void;
 }
 
-export default function SearchBox(props: Props) {
+export default function SearchBox(props: Props): JSX.Element {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   return (
-    <form className="SearchBox" onSubmit={(e) => props.handleSearchSubmit(e)}>
+    <form
+      className="SearchBox"
+      onSubmit={(e: React.FormEvent) => props.handleSearchSubmit(e)}
+      autoComplete="off"
+    >
       <input
         className="SearchBox-input"
         type="text"

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import "../styles/Weather.css";
 
 interface Props {
   location: string;
@@ -33,6 +34,7 @@ export default function Weather(props: Props) {
     const pos: any = await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
+    console.log(pos);
     setCoordinates([pos.coords.longitude, pos.coords.latitude]);
   };
   getCoords();
@@ -41,19 +43,20 @@ export default function Weather(props: Props) {
     const geocodingResponse = await axios.get(
       `${GEO_CODING_BASE_URL}lat=${coordinates[0]}&lon=${coordinates[1]}&limit=1${WEATHER_API_KEY}`
     );
-    const locationName = geocodingResponse.data[0].name;
+    console.log(geocodingResponse);
+    // const locationName = geocodingResponse.data[0].name;
     // With that location name, make a call to the weather API to fetch data
-    props.setLocation(locationName);
+    // props.setLocation(locationName);
   };
-  getLocationFromAPI();
+  //   getLocationFromAPI();
 
-  useEffect(() => {
-    if (props.location) {
-      axios
-        .get(`${GEO_API_BASE_URL}${props.location}${GEO_API_KEY}`)
-        .then((res) => console.log(res.data));
-    }
-  }, [props.location]);
+  //   useEffect(() => {
+  //     if (props.location) {
+  //       axios
+  //         .get(`${GEO_API_BASE_URL}${props.location}${GEO_API_KEY}`)
+  //         .then((res) => console.log(res.data));
+  //     }
+  //   }, []);
 
   //   const fetchWeatherFromAPI = async () => {
   //     if (props.location !== prevProps.location) {
