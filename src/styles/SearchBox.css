@@ -1,0 +1,15 @@
+.SearchBox {
+  display: flex;
+  background: white;
+  padding: 1rem;
+  border-bottom: 1px solid black;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.SearchBox-input {
+  outline: none;
+  width: 100%;
+  border: none;
+  font-size: 1.2rem;
+}
