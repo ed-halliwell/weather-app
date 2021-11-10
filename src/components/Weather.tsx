@@ -1,26 +1,27 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "../styles/Weather.css";
 import CurrentWeather from "./CurrentWeather";
 import { IWeather } from "../utils/interfaces";
 import { GEO_API_BASE_URL, GEO_API_KEY } from "../utils/APIFragments";
+
 interface WeatherProps {
   weather: IWeather | undefined;
   location: string;
   setLocation: (locationName: string) => void;
 }
 
-export default function Weather(props: WeatherProps) {
+export default function Weather(props: WeatherProps): JSX.Element {
   const [coordinates, setCoordinates] = useState<number[]>([]);
   //   const [forecast, setForecast] = useState<IForecast>();
 
   //   'Get my current location' coordinates from browser
-  const handleMyLocation = async () => {
+  const handleMyLocationClick = async () => {
     const pos: any = await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
-    setCoordinates([pos.coords.latitude, pos.coords.longitude]);
-    console.log(coordinates);
+    setCoordinates([pos.coords.latitude, pos.coords.longditude]);
+    console.log(pos);
 
     // Get Location Name from Coordinates
     function getLocationFromCoordinates(lat: number, long: number) {
@@ -56,7 +57,7 @@ export default function Weather(props: WeatherProps) {
 
         <button
           className="Weather-GetCurrentLocation"
-          onClick={() => handleMyLocation()}
+          onClick={() => handleMyLocationClick()}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

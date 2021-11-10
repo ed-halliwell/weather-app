@@ -28,7 +28,7 @@ export default function App(): JSX.Element {
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error("Something went wrong");
+          throw new Error("Location not found");
         }
       })
       .then((res) => {
@@ -66,7 +66,7 @@ export default function App(): JSX.Element {
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error("Something went wrong");
+          throw new Error("Location not found");
         }
       })
       .then((jsonBody: any) => setWeather({ ...jsonBody }));
