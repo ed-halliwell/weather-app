@@ -21,6 +21,10 @@ export default function App(): JSX.Element {
     fetchCurrentWeatherData(searchTerm);
   };
 
+  const handleCurrentLocationClick = async (searchTerm: string) => {
+    fetchCurrentWeatherData(searchTerm);
+  };
+
   const fetchFullPlaceName = async (searchTerm: string) => {
     // fetch full placename
     fetch(`${GEO_API_BASE_URL}${searchTerm}${GEO_API_KEY}`)
@@ -69,7 +73,7 @@ export default function App(): JSX.Element {
           throw new Error("Location not found");
         }
       })
-      .then((jsonBody: any) => setWeather({ ...jsonBody }));
+      .then((jsonBody: IWeather) => setWeather({ ...jsonBody }));
   };
 
   return (
@@ -87,6 +91,7 @@ export default function App(): JSX.Element {
           location={location}
           weather={weather}
           setLocation={setLocation}
+          handleCurrentLocationClick={handleCurrentLocationClick}
         />
       </div>
     </div>

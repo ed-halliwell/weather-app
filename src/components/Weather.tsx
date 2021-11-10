@@ -1,18 +1,16 @@
-import axios from "axios";
-import { useState } from "react";
 import "../styles/Weather.css";
 import CurrentWeather from "./CurrentWeather";
-import { IWeather } from "../utils/interfaces";
+import { IWeather, PlaceNameContext } from "../utils/interfaces";
 import { GEO_API_BASE_URL, GEO_API_KEY } from "../utils/APIFragments";
 
 interface WeatherProps {
   weather: IWeather | undefined;
   location: string;
   setLocation: (locationName: string) => void;
+  handleCurrentLocationClick: (searchQuery: string) => void;
 }
 
 export default function Weather(props: WeatherProps): JSX.Element {
-  const [coordinates, setCoordinates] = useState<number[]>([]);
   //   const [forecast, setForecast] = useState<IForecast>();
 
   //   'Get my current location' coordinates from browser
@@ -20,23 +18,58 @@ export default function Weather(props: WeatherProps): JSX.Element {
     const pos: any = await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
-    setCoordinates([pos.coords.latitude, pos.coords.longditude]);
-    console.log(pos);
+    await fetchFullPlaceNameFromCoordinates(
+      pos.coords.latitude,
+      pos.coords.longitude
+    );
+  };
 
+  const fetchFullPlaceNameFromCoordinates = async (
+    lat: number,
+    long: number
+  ) => {
     // Get Location Name from Coordinates
-    function getLocationFromCoordinates(lat: number, long: number) {
-      axios
-        .get(`${GEO_API_BASE_URL}${lat},${long}${GEO_API_KEY}`)
-        .then(
-          (res: any) =>
-            `${res.data.features[0].context[2].text}, ${res.data.features[0].context[3].text}`
-        )
-        .then((locationName: string) => {
-          props.setLocation(locationName);
-          console.log(locationName);
+    fetch(`${GEO_API_BASE_URL}${long},${lat}${GEO_API_KEY}`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Location not found");
+        }
+      })
+      .then((res) => {
+        const contextArray = res.features[0].context;
+        const neighborhood = contextArray.find((a: PlaceNameContext) => {
+          if (a.id.includes("neighborhood")) {
+            return a;
+          } else {
+            return false;
+          }
         });
-    }
-    getLocationFromCoordinates(coordinates[0], coordinates[1]);
+        const placeObj = contextArray.find((a: PlaceNameContext) => {
+          if (a.id.includes("place")) {
+            return a;
+          } else {
+            return false;
+          }
+        });
+        const countryObj = contextArray.find((a: PlaceNameContext) => {
+          if (a.id.includes("country")) {
+            return a;
+          } else {
+            return false;
+          }
+        });
+        if (placeObj) {
+          return `${neighborhood.text}, ${placeObj.text}, ${countryObj.text}`;
+        } else {
+          return `${neighborhood.text}, ${countryObj.text}`;
+        }
+      })
+      .then((locationName: string) => {
+        props.setLocation(locationName);
+        props.handleCurrentLocationClick(locationName);
+      });
   };
 
   //       let forecastRes = await axios.get(

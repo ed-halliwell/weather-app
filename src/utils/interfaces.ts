@@ -21,3 +21,19 @@ export interface PlaceNameContext {
   wikidata: string;
   short_code?: string;
 }
+
+export interface geoDataResponse {
+  data: {
+    features: [
+      {
+        text: string;
+        context: [
+          {
+            id: string;
+            text: string;
+          }
+        ];
+      }
+    ];
+  };
+}
