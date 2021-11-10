@@ -11,8 +11,11 @@ export default function SearchBox(props: SearchBoxProps): JSX.Element {
   return (
     <form
       className="SearchBox"
-      onSubmit={(e: React.FormEvent) => props.handleSearchSubmit(e)}
       autoComplete="off"
+      onSubmit={(e: React.FormEvent) => {
+        setSearchQuery("");
+        props.handleSearchSubmit(e);
+      }}
     >
       <input
         className="SearchBox-input"

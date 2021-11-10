@@ -1,15 +1,15 @@
-import "./styles/WindIcon.css";
+import "../styles/WindIcon.css";
 
 interface Props {
   windDirection: number;
   windSpeed: number;
 }
 
-export default function WindIcon(props: Props) {
-  let adjDirection = props.windDirection - 180;
+export default function WindIcon(props: Props): JSX.Element {
+  const adjDirection = props.windDirection - 180;
   return (
     <div className="WindIcon-container">
-      <div className="WindIcon-WindSpeed">{props.windSpeed}</div>
+      <div className="WindIcon-WindSpeed">{Math.round(props.windSpeed)}</div>
       <div
         className="WindIcon-Direction"
         style={{ transform: `rotate(${adjDirection}deg)` }}

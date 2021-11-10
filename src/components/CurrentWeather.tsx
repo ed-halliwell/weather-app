@@ -1,32 +1,47 @@
-import "../styles/Currentweather.css";
+import "../styles/CurrentWeather.css";
 import WindIcon from "./WindIcon";
 import { IWeather } from "../utils/interfaces";
+import getWindDescription from "../utils/getWindDescription";
 
-interface Props {
+interface CurrentWeatherProps {
   weather: IWeather;
 }
 
-function CurrentWeather(props: Props) {
+export default function CurrentWeather(
+  props: CurrentWeatherProps
+): JSX.Element {
   return (
     <div className="CurrentWeather">
-      <p>Current Weather</p>
-      <div className="CurrentWeather-container">
-        <span className="CurrentWeather-temperature">
-          {props.weather.temperature} °C
-        </span>
-        <div className="CurrentWeather-WindIcon">
-          <WindIcon
-            windSpeed={props.weather.windSpeed}
-            windDirection={props.weather.windDirection}
-          />
+      <h4>Current Weather</h4>
+      {props.weather && (
+        <div className="CurrentWeather-container">
+          <span className="CurrentWeather-temperature">
+            {props.weather && Math.round(props.weather.main.temp - 273.15)} °C
+          </span>
+          <div className="CurrentWeather-WindIcon">
+            <WindIcon
+              windSpeed={props.weather.wind.speed}
+              windDirection={props.weather.wind.deg}
+            />
+          </div>
         </div>
-      </div>
-      {/* <p>Feels Like: {weather.feelsLike} °C</p>
-        <p>Wind Speed: {weather.windSpeed} mph</p>
-        <p>Wind Direction: {weather.windDirection} degrees</p> */}
-      <p>Description: {props.weather.description}</p>
+      )}
+      {props.weather && (
+        <>
+          <p>
+            Feels Like: {Math.round(props.weather.main.feels_like - 273.15)} °C
+          </p>
+          <p>
+            {getWindDescription(
+              props.weather.wind.speed,
+              props.weather.wind.deg
+            )}
+          </p>
+          <p style={{ textTransform: "capitalize" }}>
+            {props.weather.weather[0].description}
+          </p>
+        </>
+      )}
     </div>
   );
 }
-
-export default CurrentWeather;

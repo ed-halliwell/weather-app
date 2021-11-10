@@ -1,58 +1,64 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/Weather.css";
-
+import CurrentWeather from "./CurrentWeather";
+import { IWeather } from "../utils/interfaces";
+// import { GEO_API_BASE_URL, GEO_API_KEY } from "../utils/APIFragments";
 interface WeatherProps {
+  weather: IWeather | undefined;
   location: string;
   setLocation: (locationName: string) => void;
 }
 
-// Weather API docs: https://openweathermap.org/current
-const WEATHER_API_BASE_URL =
-  "http://api.openweathermap.org/data/2.5/weather?q=";
-const WEATHER_API_KEY = "&appid=2aeb3fa9d22eee3b7631e9db2332118e";
-
-const WEATHER_FORECAST_API_BASE_URL =
-  "http://api.openweathermap.org/data/2.5/onecall?";
-
-const GEO_API_BASE_URL = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
-const GEO_API_KEY =
-  ".json?access_token=pk.eyJ1IjoiZWRoYWxsaXdlbGwiLCJhIjoiY2trdXozZ2N4MWNyaDJ2cGMweWRvcDk1ZiJ9.ExEuJTASuQGJOm2oDnGSjw";
-
-const GEO_CODING_BASE_URL = "http://api.openweathermap.org/geo/1.0/reverse?";
-
 export default function Weather(props: WeatherProps) {
   const [coordinates, setCoordinates] = useState<number[]>([]);
-  //   const [weather, setWeather] = useState<IForecast>();
+
   //   const [forecast, setForecast] = useState<IForecast>();
 
+  //   // Get Location Name from Coordinates
+  //   const getLocationFromCoordinates = async (lat: number, long: number) => {
+  //     axios
+  //       .get(
+  //         `${GEO_API_BASE_URL}${coordinates[1]},${coordinates[0]}${GEO_API_KEY}`
+  //       )
+  //       .then(
+  //         (res: any) =>
+  //           `${res.data.features[0].context[2].text}, ${res.data.features[0].context[3].text}`
+  //       )
+  //       .then((locationName: string) => {
+  //         props.setLocation(locationName);
+  //         console.log(locationName);
+  //       });
+  //   };
+
+  //   'Get my current location' coordinates from browser
   const getCoords = async () => {
     const pos: any = await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
-    console.log(pos);
-    setCoordinates([pos.coords.longitude, pos.coords.latitude]);
+    return pos;
   };
-  getCoords();
 
-  const getLocationFromAPI = async () => {
-    const geocodingResponse = await axios.get(
-      `${GEO_CODING_BASE_URL}lat=${coordinates[0]}&lon=${coordinates[1]}&limit=1${WEATHER_API_KEY}`
-    );
-    console.log(geocodingResponse);
-    // const locationName = geocodingResponse.data[0].name;
-    // With that location name, make a call to the weather API to fetch data
-    // props.setLocation(locationName);
-  };
-  //   getLocationFromAPI();
+  //   const getCurrentLocationCoordinates = async () => {
+  //     const get = await getCoords();
+  //     const successfullySetCoords = await setCoordinates([
+  //       get.coords.latitude,
+  //       get.coords.longitude,
+  //     ]);
+  //     await getLocationFromCoordinates(get.coords.latitude, get.coords.longitude);
+  //     console.log("I now have the coordinates back, they are", coordinates);
+  //   };
 
   //   useEffect(() => {
-  //     if (props.location) {
-  //       axios
-  //         .get(`${GEO_API_BASE_URL}${props.location}${GEO_API_KEY}`)
-  //         .then((res) => console.log(res.data));
-  //     }
-  //   }, []);
+  //     getLocationFromCoordinates();
+  //     console.log("useEffect is firing");
+  //   }, [coordinates]);
+
+  //   if (props.location !== "") {
+  //     axios
+  //       .get(`${GEO_API_BASE_URL}${props.location}${GEO_API_KEY}`)
+  //       .then((res) => console.log(res.data));
+  //   }
 
   //   const fetchWeatherFromAPI = async () => {
   //     if (props.location !== prevProps.location) {
@@ -88,8 +94,15 @@ export default function Weather(props: WeatherProps) {
       <h2 className="Weather-location">
         {props.location ? props.location : "Finding current location..."}
       </h2>
-      {/* <CurrentWeather weather={{ ...weather }} />
-      <Forecast forecast={{ ...forecast }} /> */}
+      <button
+      //   onClick={() => getCurrentLocationCoordinates()}
+      >
+        Get my current location
+      </button>
+      {props.weather !== undefined && (
+        <CurrentWeather weather={props.weather} />
+      )}
+      {/* <Forecast forecast={{ ...forecast }} />  */}
     </div>
   );
 }

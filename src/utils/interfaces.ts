@@ -1,7 +1,23 @@
 export interface IWeather {
-  temperature: number;
-  windSpeed: number;
-  windDirection: number;
-  description: string;
+  name: string;
+  wind: {
+    speed: number;
+    deg: number;
+  };
+  weather: [
+    {
+      description: string;
+    }
+  ];
+  main: {
+    feels_like: number;
+    temp: number;
+  };
 }
-export {};
+
+export interface PlaceNameContext {
+  id: string;
+  text: string;
+  wikidata: string;
+  short_code?: string;
+}
