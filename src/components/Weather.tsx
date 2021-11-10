@@ -15,9 +15,10 @@ export default function Weather(props: WeatherProps): JSX.Element {
 
   //   'Get my current location' coordinates from browser
   const handleMyLocationClick = async () => {
-    const pos: any = await new Promise((resolve, reject) => {
+    const pos: GeolocationPosition = await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
+    console.log(pos);
     await fetchFullPlaceNameFromCoordinates(
       pos.coords.latitude,
       pos.coords.longitude
