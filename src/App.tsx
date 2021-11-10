@@ -14,9 +14,7 @@ export default function App(): JSX.Element {
   const [location, setLocation] = useState<string>("");
   const [weather, setWeather] = useState<IWeather>();
 
-  const handleSearchSubmit = async (e: any) => {
-    e.preventDefault();
-    const searchTerm = e.target.children.searchBox.value;
+  const handleSearchSubmit = async (searchTerm: string) => {
     fetchFullPlaceName(searchTerm);
     fetchCurrentWeatherData(searchTerm);
   };

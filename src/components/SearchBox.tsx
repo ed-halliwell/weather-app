@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../styles/SearchBox.css";
 
 interface SearchBoxProps {
-  handleSearchSubmit: (searchQuery: React.FormEvent) => void;
+  handleSearchSubmit: (searchQuery: string) => void;
 }
 
 export default function SearchBox(props: SearchBoxProps): JSX.Element {
@@ -12,9 +12,14 @@ export default function SearchBox(props: SearchBoxProps): JSX.Element {
     <form
       className="SearchBox"
       autoComplete="off"
-      onSubmit={(e: React.FormEvent) => {
+      onSubmit={(e: React.SyntheticEvent) => {
+        e.preventDefault();
+        const target = e.target as typeof e.target & {
+          children: { searchBox: { value: string } };
+        };
         setSearchQuery("");
-        props.handleSearchSubmit(e);
+        const searchTerm = target.children.searchBox.value;
+        props.handleSearchSubmit(searchTerm);
       }}
     >
       <input
