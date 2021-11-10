@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import "../styles/Weather.css";
 import CurrentWeather from "./CurrentWeather";
 import { IWeather } from "../utils/interfaces";
-// import { GEO_API_BASE_URL, GEO_API_KEY } from "../utils/APIFragments";
+import { GEO_API_BASE_URL, GEO_API_KEY } from "../utils/APIFragments";
 interface WeatherProps {
   weather: IWeather | undefined;
   location: string;
@@ -12,93 +12,67 @@ interface WeatherProps {
 
 export default function Weather(props: WeatherProps) {
   const [coordinates, setCoordinates] = useState<number[]>([]);
-
   //   const [forecast, setForecast] = useState<IForecast>();
 
-  //   // Get Location Name from Coordinates
-  //   const getLocationFromCoordinates = async (lat: number, long: number) => {
-  //     axios
-  //       .get(
-  //         `${GEO_API_BASE_URL}${coordinates[1]},${coordinates[0]}${GEO_API_KEY}`
-  //       )
-  //       .then(
-  //         (res: any) =>
-  //           `${res.data.features[0].context[2].text}, ${res.data.features[0].context[3].text}`
-  //       )
-  //       .then((locationName: string) => {
-  //         props.setLocation(locationName);
-  //         console.log(locationName);
-  //       });
-  //   };
-
   //   'Get my current location' coordinates from browser
-  const getCoords = async () => {
+  const handleMyLocation = async () => {
     const pos: any = await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
-    return pos;
+    setCoordinates([pos.coords.latitude, pos.coords.longitude]);
+    console.log(coordinates);
+
+    // Get Location Name from Coordinates
+    function getLocationFromCoordinates(lat: number, long: number) {
+      axios
+        .get(`${GEO_API_BASE_URL}${lat},${long}${GEO_API_KEY}`)
+        .then(
+          (res: any) =>
+            `${res.data.features[0].context[2].text}, ${res.data.features[0].context[3].text}`
+        )
+        .then((locationName: string) => {
+          props.setLocation(locationName);
+          console.log(locationName);
+        });
+    }
+    getLocationFromCoordinates(coordinates[0], coordinates[1]);
   };
 
-  //   const getCurrentLocationCoordinates = async () => {
-  //     const get = await getCoords();
-  //     const successfullySetCoords = await setCoordinates([
-  //       get.coords.latitude,
-  //       get.coords.longitude,
-  //     ]);
-  //     await getLocationFromCoordinates(get.coords.latitude, get.coords.longitude);
-  //     console.log("I now have the coordinates back, they are", coordinates);
-  //   };
-
-  //   useEffect(() => {
-  //     getLocationFromCoordinates();
-  //     console.log("useEffect is firing");
-  //   }, [coordinates]);
-
-  //   if (props.location !== "") {
-  //     axios
-  //       .get(`${GEO_API_BASE_URL}${props.location}${GEO_API_KEY}`)
-  //       .then((res) => console.log(res.data));
-  //   }
-
-  //   const fetchWeatherFromAPI = async () => {
-  //     if (props.location !== prevProps.location) {
-  //       let mapResponse = await axios.get(
-
-  //       );
-  //       let newCoordinates = mapResponse.data.features[0].geometry.coordinates;
-  //       let weatherRes = await axios.get(
-  //         `${WEATHER_API_BASE_URL}${this.props.location}${WEATHER_API_KEY}`
-  //       );
-  //       let weather = weatherRes.data;
   //       let forecastRes = await axios.get(
   //         `${WEATHER_FORECAST_API_BASE_URL}lat=${newCoordinates[0]}&lon=${newCoordinates[1]}&exclude=minutely,hourly${WEATHER_API_KEY}`
   //       );
   //       let newForecast = forecastRes.data.daily;
   //       // console.log(newForecast);
-  //       this.setState({
-  //         coordinates: newCoordinates,
-  //         weather: {
-  //           temperature: Math.round(weather.main.temp - 272),
-  //           feelsLike: Math.round(weather.main.feels_like - 272),
-  //           windSpeed: Math.round(weather.wind.speed),
-  //           windDirection: weather.wind.deg,
-  //           description: weather.weather[0].main,
-  //         },
-  //         forecast: { ...newForecast },
-  //       });
-  //     }
-  //   };
 
   return (
     <div className="Weather">
-      <h2 className="Weather-location">
-        {props.location ? props.location : "Finding current location..."}
-      </h2>
-      <button
-      //   onClick={() => getCurrentLocationCoordinates()}
-      >
-        Get my current location
-      </button>
+      <div className="Weather-PlaceNameContainer">
+        {props.location && (
+          <h2 className="Weather-location">{props.location}</h2>
+        )}
+        {!props.location && (
+          <h2 className="Weather-noLocation">Is it raining there?</h2>
+        )}
+
+        <button
+          className="Weather-GetCurrentLocation"
+          onClick={() => handleMyLocation()}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            fill="#000000"
+          >
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"
+              fill="rgb(35, 48, 82)"
+            />
+          </svg>
+        </button>
+      </div>
       {props.weather !== undefined && (
         <CurrentWeather weather={props.weather} />
       )}

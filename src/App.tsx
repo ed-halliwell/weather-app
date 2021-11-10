@@ -17,7 +17,11 @@ export default function App(): JSX.Element {
   const handleSearchSubmit = async (e: any) => {
     e.preventDefault();
     const searchTerm = e.target.children.searchBox.value;
+    fetchFullPlaceName(searchTerm);
+    fetchCurrentWeatherData(searchTerm);
+  };
 
+  const fetchFullPlaceName = async (searchTerm: string) => {
     // fetch full placename
     fetch(`${GEO_API_BASE_URL}${searchTerm}${GEO_API_KEY}`)
       .then((response) => {
@@ -30,14 +34,14 @@ export default function App(): JSX.Element {
       .then((res) => {
         const placeName = res.features[0].text;
         const contextArray = res.features[0].context;
-        const placeObj = contextArray.filter((a: PlaceNameContext) => {
+        const placeObj = contextArray.find((a: PlaceNameContext) => {
           if (a.id.includes("place")) {
             return a.id;
           } else {
             return false;
           }
         });
-        const countryObj = contextArray.filter((a: PlaceNameContext) => {
+        const countryObj = contextArray.find((a: PlaceNameContext) => {
           if (a.id.includes("country")) {
             return a.id;
           } else {
@@ -53,7 +57,9 @@ export default function App(): JSX.Element {
       .then((locationName: string) => {
         setLocation(locationName);
       });
+  };
 
+  const fetchCurrentWeatherData = async (searchTerm: string) => {
     // fetch current weather data
     fetch(`${WEATHER_API_BASE_URL}${searchTerm}${WEATHER_API_KEY}`)
       .then((response) => {

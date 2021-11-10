@@ -8,3 +8,20 @@
   margin: 1rem;
   text-transform: capitalize;
 }
+
+.Weather-noLocation {
+  margin: 1rem;
+}
+
+.Weather-PlaceNameContainer {
+  display: flex;
+}
+
+.Weather-PlaceNameContainer button {
+  margin-left: auto;
+  margin-right: 1rem;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
