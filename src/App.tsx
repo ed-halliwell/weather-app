@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SearchBox from "./components/SearchBox";
 import Weather from "./components/Weather";
+import Spinner from "./components/Spinner";
 import "./styles/App.css";
 import { PlaceNameContext, IWeather } from "./utils/interfaces";
 import {
@@ -84,6 +85,7 @@ export default function App(): JSX.Element {
       // }}
     >
       <div className="App-WeatherContainer">
+        <Spinner />
         <SearchBox handleSearchSubmit={handleSearchSubmit} />
         <Weather
           location={location}
