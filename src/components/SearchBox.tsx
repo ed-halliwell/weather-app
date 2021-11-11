@@ -12,14 +12,10 @@ export default function SearchBox(props: SearchBoxProps): JSX.Element {
     <form
       className="SearchBox"
       autoComplete="off"
-      onSubmit={(e: React.SyntheticEvent) => {
+      onSubmit={(e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const target = e.target as typeof e.target & {
-          children: { searchBox: { value: string } };
-        };
+        props.handleSearchSubmit(searchQuery);
         setSearchQuery("");
-        const searchTerm = target.children.searchBox.value;
-        props.handleSearchSubmit(searchTerm);
       }}
     >
       <input
