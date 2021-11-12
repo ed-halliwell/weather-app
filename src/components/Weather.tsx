@@ -39,32 +39,20 @@ export default function Weather(props: WeatherProps): JSX.Element {
         }
       })
       .then((res) => {
-        const contextArray = res.features[0].context;
-        const neighborhood = contextArray.find((a: PlaceNameContext) => {
-          if (a.id.includes("neighborhood")) {
-            return a;
-          } else {
-            return false;
-          }
-        });
-        const placeObj = contextArray.find((a: PlaceNameContext) => {
-          if (a.id.includes("place")) {
-            return a;
-          } else {
-            return false;
-          }
-        });
-        const countryObj = contextArray.find((a: PlaceNameContext) => {
-          if (a.id.includes("country")) {
-            return a;
-          } else {
-            return false;
-          }
-        });
+        const contextArray: PlaceNameContext[] = res.features[0].context;
+        const neighborhood = contextArray.find((a: PlaceNameContext) =>
+          a.id.includes("neighborhood")
+        );
+        const placeObj = contextArray.find((a: PlaceNameContext) =>
+          a.id.includes("place")
+        );
+        const countryObj = contextArray.find((a: PlaceNameContext) =>
+          a.id.includes("country")
+        );
         if (placeObj) {
-          return `${neighborhood.text}, ${placeObj.text}, ${countryObj.text}`;
+          return `${neighborhood?.text}, ${placeObj.text}, ${countryObj?.text}`;
         } else {
-          return `${neighborhood.text}, ${countryObj.text}`;
+          return `${neighborhood?.text}, ${countryObj?.text}`;
         }
       })
       .then((locationName: string) => {
