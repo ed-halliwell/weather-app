@@ -1,4 +1,4 @@
-export interface IWeather {
+export interface ICurrentWeather {
   name: string;
   wind: {
     speed: number;

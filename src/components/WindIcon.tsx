@@ -1,21 +1,41 @@
-import "../styles/WindIcon.css";
+import { Center, Box } from "@chakra-ui/react";
 
 interface Props {
   windDirection: number;
   windSpeed: number;
 }
 
-export default function WindIcon(props: Props): JSX.Element {
-  const adjDirection = props.windDirection - 180;
+export default function WindIcon({
+  windDirection,
+  windSpeed,
+}: Props): JSX.Element {
+  const adjDirection = windDirection - 180;
   return (
-    <div className="WindIcon-container">
-      <div className="WindIcon-WindSpeed">{Math.round(props.windSpeed)}</div>
-      <div
-        className="WindIcon-Direction"
-        style={{ transform: `rotate(${adjDirection}deg)` }}
+    <Center>
+      <Center
+        sx={{
+          borderRadius: "50%",
+          border: "1px",
+          backgroundColor: "white",
+          width: "1.5rem",
+          height: "1.5rem",
+          zIndex: "3",
+          fontWeight: "bold",
+        }}
+      >
+        {Math.round(windSpeed)}
+      </Center>
+      <Box
+        // className="WindIcon-Direction"
+        style={{
+          transform: `rotate(${adjDirection}deg)`,
+          position: "absolute",
+          height: "2.7rem",
+          fontSize: "0.8rem",
+        }}
       >
         &#8593;
-      </div>
-    </div>
+      </Box>
+    </Center>
   );
 }
