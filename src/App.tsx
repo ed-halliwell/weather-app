@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SearchBox from "./components/SearchBox";
-import { Center, VStack } from "@chakra-ui/react";
+import { Box, Center, VStack } from "@chakra-ui/react";
 import WeatherContainer from "./components/WeatherContainer";
 
 export default function App(): JSX.Element {
@@ -16,16 +16,18 @@ export default function App(): JSX.Element {
       h="100vh"
       color="rgb(35, 48, 82)"
     >
-      <VStack
+      <Box
         boxShadow="0 8px 6px -6px black"
         bg="white"
         borderRadius="5px"
         m="0"
-        w="90%"
+        minW={{ base: "85%", md: "600px" }}
       >
-        <SearchBox handleSetLocation={setLocation} />
-        <WeatherContainer location={location} />
-      </VStack>
+        <VStack>
+          <SearchBox handleSetLocation={setLocation} />
+          <WeatherContainer location={location} />
+        </VStack>
+      </Box>
     </Center>
   );
 }

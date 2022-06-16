@@ -98,7 +98,7 @@ export default function SearchBox({
   };
 
   return (
-    <Container px="0" py="1rem" borderBottom="1px solid lightgrey">
+    <Container py="1rem" borderBottom="1px solid lightgrey">
       <form
         autoComplete="off"
         onSubmit={(e: React.SyntheticEvent<HTMLFormElement>) => {
