@@ -15,8 +15,8 @@ export default function CurrentWeather({
   const [currentWeather, setCurrentWeather] = useState<ICurrentWeather>();
 
   useEffect(() => {
-    if (location) fetchCurrentWeatherData(location);
-  }, [location]);
+    if (location && !currentWeather) fetchCurrentWeatherData(location);
+  }, [currentWeather, location]);
 
   const fetchCurrentWeatherData = async (searchTerm: string) => {
     fetch(`${WEATHER_API_BASE_URL}${searchTerm}${WEATHER_API_KEY}`)
@@ -29,34 +29,32 @@ export default function CurrentWeather({
       })
       .then((res: ICurrentWeather) => setCurrentWeather({ ...res }));
   };
-  console.log(currentWeather);
   return (
     <Container maxW="100%" py="1rem">
       <Heading fontSize="md">Current Weather</Heading>
       {currentWeather && (
-        <HStack spacing="8">
-          <Text as="span" fontSize="5xl">
-            {currentWeather && Math.round(currentWeather.main.temp - 273.15)} °C
-          </Text>
-          <WindIcon
-            windSpeed={currentWeather.wind.speed}
-            windDirection={currentWeather.wind.deg}
-          />
-        </HStack>
-      )}
-      {currentWeather && (
         <>
+          <HStack spacing="8">
+            <Text as="span" fontSize="5xl">
+              {currentWeather && Math.round(currentWeather.main.temp - 273.15)}{" "}
+              °C
+            </Text>
+            <WindIcon
+              windSpeed={currentWeather.wind.speed}
+              windDirection={currentWeather.wind.deg}
+            />
+          </HStack>
           <Text fontSize="sm">
             Feels like: {Math.round(currentWeather.main.feels_like - 273.15)} °C
+          </Text>
+          <Text fontSize="sm" sx={{ textTransform: "capitalize" }}>
+            {currentWeather.weather[0].description}
           </Text>
           <Text fontSize="sm">
             {getWindDescription(
               currentWeather.wind.speed,
               currentWeather.wind.deg
             )}
-          </Text>
-          <Text fontSize="sm" sx={{ textTransform: "capitalize" }}>
-            {currentWeather.weather[0].description}
           </Text>
         </>
       )}

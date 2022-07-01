@@ -26,11 +26,10 @@ export default function WindIcon({
         {Math.round(windSpeed)}
       </Center>
       <Box
-        // className="WindIcon-Direction"
         style={{
           transform: `rotate(${adjDirection}deg)`,
           position: "absolute",
-          height: "2.7rem",
+          height: "2.8rem",
           fontSize: "0.8rem",
         }}
       >

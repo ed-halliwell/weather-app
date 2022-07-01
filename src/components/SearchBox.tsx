@@ -34,18 +34,10 @@ export default function SearchBox({
         const placeName = res.features[0].text;
         const contextArray = res.features[0].context;
         const placeObj = contextArray.find((a: PlaceNameContext) => {
-          if (a.id.includes("place")) {
-            return a.id;
-          } else {
-            return false;
-          }
+          return a.id.includes("place") ? a.id : false;
         });
         const countryObj = contextArray.find((a: PlaceNameContext) => {
-          if (a.id.includes("country")) {
-            return a.id;
-          } else {
-            return false;
-          }
+          return a.id.includes("country") ? a.id : false;
         });
         if (placeObj) {
           return `${placeName}, ${placeObj.text}, ${countryObj.text}`;
