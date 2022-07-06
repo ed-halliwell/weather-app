@@ -4,6 +4,9 @@ export const WEATHER_API_BASE_URL =
 
 export const WEATHER_API_KEY = "&appid=2aeb3fa9d22eee3b7631e9db2332118e";
 
+export const GET_COORDS_FROM_LOCATION =
+  "http://api.openweathermap.org/geo/1.0/direct?q=";
+
 export const WEATHER_FORECAST_API_BASE_URL =
   "https://api.openweathermap.org/data/2.5/onecall?";
 

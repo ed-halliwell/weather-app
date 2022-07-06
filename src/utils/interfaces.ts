@@ -37,3 +37,30 @@ export interface geoDataResponse {
     ];
   };
 }
+
+export interface DailyForecast {
+  date: string;
+  temp: {
+    day: number;
+    eve: number;
+    max: number;
+    min: number;
+    morn: number;
+    night: number;
+  };
+  feels_like: {
+    day: number;
+    eve: number;
+    morn: number;
+    night: number;
+  };
+  weather: {
+    description: string;
+    main: string;
+  };
+  wind: {
+    wind_speed: number;
+    wind_deg: number;
+    wind_gust: number;
+  };
+}

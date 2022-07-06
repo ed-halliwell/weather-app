@@ -4,6 +4,7 @@ import getWindDescription from "../utils/getWindDescription";
 import { Container, Heading, HStack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { WEATHER_API_BASE_URL, WEATHER_API_KEY } from "../utils/APIFragments";
+import getTempInC from "../utils/getTempInC";
 
 interface CurrentWeatherProps {
   location: string;
@@ -36,8 +37,7 @@ export default function CurrentWeather({
         <>
           <HStack spacing="8">
             <Text as="span" fontSize="5xl">
-              {currentWeather && Math.round(currentWeather.main.temp - 273.15)}{" "}
-              °C
+              {currentWeather && getTempInC(currentWeather.main.temp)} °C
             </Text>
             <WindIcon
               windSpeed={currentWeather.wind.speed}
@@ -45,7 +45,7 @@ export default function CurrentWeather({
             />
           </HStack>
           <Text fontSize="sm">
-            Feels like: {Math.round(currentWeather.main.feels_like - 273.15)} °C
+            Feels like: {getTempInC(currentWeather.main.feels_like)} °C
           </Text>
           <Text fontSize="sm" sx={{ textTransform: "capitalize" }}>
             {currentWeather.weather[0].description}

@@ -1,62 +1,77 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Heading } from "@chakra-ui/react";
+import { Box, Container, Heading, HStack } from "@chakra-ui/react";
 import {
+  GET_COORDS_FROM_LOCATION,
   WEATHER_API_KEY,
   WEATHER_FORECAST_API_BASE_URL,
 } from "../utils/APIFragments";
+import { DailyForecast } from "../utils/interfaces";
+import DayForecast from "./DayForecast";
 
 interface ForecastProps {
   location: string;
 }
 
 export default function Forecast({ location }: ForecastProps): JSX.Element {
-  const [forecast, setForecast] = useState<unknown | undefined>();
+  const [dailyForecast, setDailyForecast] = useState<
+    DailyForecast[] | undefined
+  >();
 
   useEffect(() => {
-    const fetchForecastData = async (searchTerm: string) => {
-      console.log("making fetchForecastData call");
-      const forecastRes = await axios.get(
-        // `${WEATHER_FORECAST_API_BASE_URL}lat=${newCoordinates[0]}&lon=${newCoordinates[1]}&exclude=minutely,hourly${WEATHER_API_KEY}`
-        `${WEATHER_FORECAST_API_BASE_URL}lat=0&lon=0&exclude=current,minutely,hourly${WEATHER_API_KEY}`
-      );
-      console.log(forecastRes.data);
-      setForecast(forecastRes.data);
-      console.log(forecast);
-    };
+    if (location && !dailyForecast) fetchForecastData(location);
+  }, [dailyForecast, location]);
 
-    if (location && !forecast) fetchForecastData(location);
-  }, [forecast, location]);
+  const fetchForecastData = async (searchTerm: string) => {
+    const getCoordinates = await axios.get(
+      `${GET_COORDS_FROM_LOCATION}${searchTerm}&limit=1${WEATHER_API_KEY}`
+    );
+    const lat = getCoordinates.data[0].lat;
+    const lon = getCoordinates.data[0].lon;
+
+    const forecastRes = await axios.get(
+      `${WEATHER_FORECAST_API_BASE_URL}lat=${lat}&lon=${lon}&exclude=current,minutely,hourly${WEATHER_API_KEY}`
+    );
+
+    const dailyForecastRaw = forecastRes.data.daily;
+    console.log(dailyForecastRaw);
+
+    const formattedForecast = dailyForecastRaw.map(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (dayForecast: any): DailyForecast => ({
+        date: new Date(dayForecast.dt * 1000).toDateString(),
+        temp: {
+          ...dayForecast.temp,
+        },
+        feels_like: {
+          ...dayForecast.feels_like,
+        },
+        weather: {
+          description: dayForecast.weather[0].description,
+          main: dayForecast.weather[0].main,
+        },
+        wind: {
+          wind_speed: dayForecast.wind_speed,
+          wind_deg: dayForecast.wind_deg,
+          wind_gust: dayForecast.wind_gust,
+        },
+      })
+    );
+    console.log(formattedForecast);
+    setDailyForecast(formattedForecast);
+  };
 
   return (
     <Container maxW="100%" py="1rem">
       <Heading fontSize="md">Weather Forecast</Heading>
-      {/* {forecast && (
-        <>
-          <HStack spacing="8">
-            <Text as="span" fontSize="5xl">
-              {currentWeather && Math.round(currentWeather.main.temp - 273.15)}{" "}
-              °C
-            </Text>
-            <WindIcon
-              windSpeed={currentWeather.wind.speed}
-              windDirection={currentWeather.wind.deg}
-            />
-          </HStack>
-          <Text fontSize="sm">
-            Feels like: {Math.round(currentWeather.main.feels_like - 273.15)} °C
-          </Text>
-          <Text fontSize="sm" sx={{ textTransform: "capitalize" }}>
-            {currentWeather.weather[0].description}
-          </Text>
-          <Text fontSize="sm">
-            {getWindDescription(
-              currentWeather.wind.speed,
-              currentWeather.wind.deg
-            )}
-          </Text>
-        </>
-      )} */}
+      <Box border="1px" maxW="80%">
+        <HStack overflowX="scroll" spacing={2}>
+          {dailyForecast &&
+            dailyForecast.map((day, i) => {
+              return <DayForecast key={i + 1} forecast={day} />;
+            })}
+        </HStack>
+      </Box>
     </Container>
   );
 }
