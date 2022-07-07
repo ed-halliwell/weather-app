@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Container,
@@ -10,15 +10,11 @@ import {
 import { SearchIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { GEO_API_BASE_URL, GEO_API_KEY } from "../utils/APIFragments";
 import { PlaceNameContext } from "../utils/interfaces";
+import { LocationContext } from "../contexts/LocationContext";
 
-interface SearchBoxProps {
-  handleSetLocation: (locationName: string) => void;
-}
-
-export default function SearchBox({
-  handleSetLocation,
-}: SearchBoxProps): JSX.Element {
+export default function SearchBox(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const { setLocation } = useContext(LocationContext);
 
   const handleSearchSubmit = async (searchTerm: string) => {
     // fetch full placename
@@ -46,7 +42,7 @@ export default function SearchBox({
         }
       })
       .then((locationName: string) => {
-        handleSetLocation(locationName);
+        setLocation(locationName);
       });
   };
 
@@ -85,7 +81,7 @@ export default function SearchBox({
         }
       })
       .then((locationName: string) => {
-        handleSetLocation(locationName);
+        setLocation(locationName);
       });
   };
 

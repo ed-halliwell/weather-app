@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Container, Heading, HStack } from "@chakra-ui/react";
+import { Box, Container, Heading } from "@chakra-ui/react";
 import {
   GET_COORDS_FROM_LOCATION,
   WEATHER_API_KEY,
@@ -64,13 +64,20 @@ export default function Forecast({ location }: ForecastProps): JSX.Element {
   return (
     <Container maxW="100%" py="1rem">
       <Heading fontSize="md">Weather Forecast</Heading>
-      <Box border="1px" maxW="80%">
-        <HStack overflowX="scroll" spacing={2}>
-          {dailyForecast &&
-            dailyForecast.map((day, i) => {
-              return <DayForecast key={i + 1} forecast={day} />;
-            })}
-        </HStack>
+      <Box
+        alignItems="flex-start"
+        display="flex"
+        flexWrap="nowrap"
+        borderRadius="5px"
+        w="100%"
+        m="1rem 0"
+        overflowX="scroll"
+        scrollSnapType="x mandatory"
+      >
+        {dailyForecast &&
+          dailyForecast.map((day, i) => {
+            return <DayForecast key={i + 1} forecast={day} />;
+          })}
       </Box>
     </Container>
   );

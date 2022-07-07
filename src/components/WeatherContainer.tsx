@@ -1,14 +1,11 @@
-import CurrentWeather from "./CurrentWeather";
+import { useContext } from "react";
+import { LocationContext } from "../contexts/LocationContext";
 import { Container, Text } from "@chakra-ui/react";
+import CurrentWeather from "./CurrentWeather";
 import Forecast from "./Forecast";
 
-interface WeatherContainerProps {
-  location: string;
-}
-
-export default function WeatherContainer({
-  location,
-}: WeatherContainerProps): JSX.Element {
+export default function WeatherContainer(): JSX.Element {
+  const { location } = useContext(LocationContext);
   return (
     <Container py="0" maxW="100%">
       <Text fontSize="xl" m="1rem">
