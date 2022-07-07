@@ -63,11 +63,8 @@ export default function Forecast({ location }: ForecastProps): JSX.Element {
 
   return (
     <Container maxW="100%" py="1rem">
-      <Heading fontSize="md">Weather Forecast</Heading>
+      <Heading fontSize="md">Forecast</Heading>
       <Box
-        alignItems="flex-start"
-        display="flex"
-        flexWrap="nowrap"
         borderRadius="5px"
         w="100%"
         m="1rem 0"
