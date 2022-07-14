@@ -5,7 +5,7 @@ interface LocationContextWrapperProps {
   children: React.ReactNode;
 }
 
-export default function UserContextWrapper(
+export default function LocationContextWrapper(
   props: LocationContextWrapperProps
 ): JSX.Element {
   const [location, setLocation] = useState<string | undefined>(undefined);

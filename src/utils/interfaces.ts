@@ -1,5 +1,6 @@
 export interface ICurrentWeather {
   name: string;
+  dt: string;
   wind: {
     speed: number;
     deg: number;

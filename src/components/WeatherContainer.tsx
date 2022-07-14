@@ -12,12 +12,10 @@ export default function WeatherContainer(): JSX.Element {
         {location ? location : "Is it raining there?"}
       </Text>
       {location && (
-        <>
-          <SimpleGrid columns={2} spacing={5}>
-            <CurrentWeather location={location} />
-            <Forecast location={location} />
-          </SimpleGrid>
-        </>
+        <SimpleGrid columns={2} spacing={5}>
+          <CurrentWeather />
+          <Forecast />
+        </SimpleGrid>
       )}
     </Container>
   );

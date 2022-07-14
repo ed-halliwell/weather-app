@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Container, Heading } from "@chakra-ui/react";
 import {
@@ -8,12 +8,10 @@ import {
 } from "../utils/APIFragments";
 import { DailyForecast } from "../utils/interfaces";
 import DayForecast from "./DayForecast";
+import { LocationContext } from "../contexts/LocationContext";
 
-interface ForecastProps {
-  location: string;
-}
-
-export default function Forecast({ location }: ForecastProps): JSX.Element {
+export default function Forecast(): JSX.Element {
+  const { location } = useContext(LocationContext);
   const [dailyForecast, setDailyForecast] = useState<
     DailyForecast[] | undefined
   >();
@@ -34,7 +32,6 @@ export default function Forecast({ location }: ForecastProps): JSX.Element {
     );
 
     const dailyForecastRaw = forecastRes.data.daily;
-    console.log(dailyForecastRaw);
 
     const formattedForecast = dailyForecastRaw.map(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,7 +54,6 @@ export default function Forecast({ location }: ForecastProps): JSX.Element {
         },
       })
     );
-    console.log(formattedForecast);
     setDailyForecast(formattedForecast);
   };
 
